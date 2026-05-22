@@ -1,16 +1,21 @@
 import { useState } from 'react';
 export default function Player({playerName, playerSymbol}) {
     const [isEditing, setIsEditing] = useState(false);
+    const [playerNameNew, setPlayerNameNew] = useState(playerName)
     const editInput = () => {
-        setIsEditing(true);
+        setIsEditing(prevValue =>  !prevValue);
     }
     return (
+      <>
+        <div>
         <li>
           <span className="player">
-            {isEditing ? (<input />) :  (<span className="player-name">{playerName}</span>)}
+            {isEditing ? (<input required defaultValue={playerNameNew} value={playerNameNew} onChange={e => setPlayerNameNew(e.target.value)}/>) :  (<span className="player-name">{playerNameNew}</span>)}
             <span className="player-symbol">{playerSymbol}</span>
           </span>
           <button onClick={editInput}>{isEditing ? 'Save' : 'Edit'}</button>
         </li>
+        </div>
+        </>
     )
 }
