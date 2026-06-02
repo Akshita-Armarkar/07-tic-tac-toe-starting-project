@@ -1,6 +1,6 @@
 export default function Gameboard({onSelectSquare, initialGameBoard, turns}) {
 
-    let gameBoard = initialGameBoard;
+    const gameBoard = initialGameBoard.map(row => [...row]);
 
     for(const turn of turns) {
         const {square, player} = turn;
