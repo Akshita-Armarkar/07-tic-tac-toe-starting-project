@@ -58,11 +58,7 @@ function App() {
     });
   }
 
-  const currentPlayerSymbol = gameTurns.length === 0
-    ? 'X'
-    : gameTurns[0].player === 'X'
-      ? 'O'
-      : 'X';
+  const currentPlayerSymbol = gameTurns.length === 0 ? 'X' : gameTurns[0].player === 'X' ? 'O' : 'X';
 
   return (
    <main>
