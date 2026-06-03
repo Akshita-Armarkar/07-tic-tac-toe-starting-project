@@ -13,6 +13,7 @@ const initialGameboard = [
 
 function App() {
   const [gameTurns, setGameTurns] = useState([]);
+  const [players, setPlayers] = useState({'X': 'Akshita', 'O': 'Ashish'})
   let winner;
   for(const combinations in WINNING_COMBINATIONS) {
     const [firstSquare, secondSquare, thirdSquare] = WINNING_COMBINATIONS[combinations];
@@ -21,7 +22,7 @@ function App() {
     const thirdSquarePlayer = gameTurns.find(turn => turn.square.row === thirdSquare.row && turn.square.col === thirdSquare.column)?.player;
 
     if(firstSquarePlayer && firstSquarePlayer === secondSquarePlayer && firstSquarePlayer === thirdSquarePlayer) {
-      winner = firstSquarePlayer
+      winner = players[firstSquarePlayer]
     }
   }
 
@@ -40,6 +41,16 @@ function App() {
     setGameTurns([]);
   }
 
+  const handlePlayerNameChange = (symbol, newName) => {
+    debugger
+    setPlayers(prevPlayers => {
+     return { 
+      ...prevPlayers,
+      [symbol] : newName
+     };
+    });
+  }
+
   const currentPlayerSymbol = gameTurns.length === 0
     ? 'X'
     : gameTurns[0].player === 'X'
@@ -50,8 +61,8 @@ function App() {
    <main>
     <div id="game-container">
       <ol id="players" className="highlight-player">
-          <Player playerName="akshita" playerSymbol="X" isActive={currentPlayerSymbol === 'X' ? 'active' : null}/>
-          <Player playerName="Ashish" playerSymbol="O" isActive={currentPlayerSymbol === 'O' ? 'active' : null}/>
+          <Player onChangeName={handlePlayerNameChange} playerName="akshita" playerSymbol="X" isActive={currentPlayerSymbol === 'X' ? 'active' : null}/>
+          <Player onChangeName={handlePlayerNameChange} playerName="Ashish" playerSymbol="O" isActive={currentPlayerSymbol === 'O' ? 'active' : null}/>
       </ol>
       {(winner || hasDraw) && <GameOver winner={winner} onRestart={handleRestart}/>}
       <Gameboard onSelectSquare={handleSelectionSquare} activePlayerSymbol={currentPlayerSymbol} initialGameBoard={initialGameboard} turns={gameTurns}/>
