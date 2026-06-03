@@ -14,17 +14,24 @@ const initialGameboard = [
 function App() {
   const [gameTurns, setGameTurns] = useState([]);
   const [players, setPlayers] = useState({'X': 'Akshita', 'O': 'Ashish'})
-  let winner;
-  for(const combinations in WINNING_COMBINATIONS) {
-    const [firstSquare, secondSquare, thirdSquare] = WINNING_COMBINATIONS[combinations];
-    const firstSquarePlayer = gameTurns.find(turn => turn.square.row === firstSquare.row && turn.square.col === firstSquare.column)?.player;
-    const secondSquarePlayer = gameTurns.find(turn => turn.square.row === secondSquare.row && turn.square.col === secondSquare.column)?.player;
-    const thirdSquarePlayer = gameTurns.find(turn => turn.square.row === thirdSquare.row && turn.square.col === thirdSquare.column)?.player;
 
-    if(firstSquarePlayer && firstSquarePlayer === secondSquarePlayer && firstSquarePlayer === thirdSquarePlayer) {
-      winner = players[firstSquarePlayer]
-    }
+  const deriveWinner = (gameTurns, players) => {
+      let winner;
+      for(const combinations in WINNING_COMBINATIONS) {
+        const [firstSquare, secondSquare, thirdSquare] = WINNING_COMBINATIONS[combinations];
+        const firstSquarePlayer = gameTurns.find(turn => turn.square.row === firstSquare.row && turn.square.col === firstSquare.column)?.player;
+        const secondSquarePlayer = gameTurns.find(turn => turn.square.row === secondSquare.row && turn.square.col === secondSquare.column)?.player;
+        const thirdSquarePlayer = gameTurns.find(turn => turn.square.row === thirdSquare.row && turn.square.col === thirdSquare.column)?.player;
+
+        if(firstSquarePlayer && firstSquarePlayer === secondSquarePlayer && firstSquarePlayer === thirdSquarePlayer) {
+          winner = players[firstSquarePlayer]
+        }
+      }
+
+      return winner;
   }
+
+  const winner = deriveWinner(gameTurns, players);
 
   const hasDraw = gameTurns.length === 9 && !winner;
 
@@ -61,8 +68,8 @@ function App() {
    <main>
     <div id="game-container">
       <ol id="players" className="highlight-player">
-          <Player onChangeName={handlePlayerNameChange} playerName="akshita" playerSymbol="X" isActive={currentPlayerSymbol === 'X' ? 'active' : null}/>
-          <Player onChangeName={handlePlayerNameChange} playerName="Ashish" playerSymbol="O" isActive={currentPlayerSymbol === 'O' ? 'active' : null}/>
+          <Player onChangeName={handlePlayerNameChange} playerName={players['X']} playerSymbol="X" isActive={currentPlayerSymbol === 'X' ? 'active' : null}/>
+          <Player onChangeName={handlePlayerNameChange} playerName={players['O']} playerSymbol="O" isActive={currentPlayerSymbol === 'O' ? 'active' : null}/>
       </ol>
       {(winner || hasDraw) && <GameOver winner={winner} onRestart={handleRestart}/>}
       <Gameboard onSelectSquare={handleSelectionSquare} activePlayerSymbol={currentPlayerSymbol} initialGameBoard={initialGameboard} turns={gameTurns}/>
